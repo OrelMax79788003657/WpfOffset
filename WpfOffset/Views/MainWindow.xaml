@@ -1,0 +1,182 @@
+﻿<Window x:Class="WpfOffset.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfOffset"
+        xmlns:vm="clr-namespace:WpfOffset.ViewModels"
+        mc:Ignorable="d"
+        Title="Калькулятор арматуры" Height="600" Width="900"  MinHeight="500" MinWidth="800" Background="#FFAFA2CC">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.CommandBindings>
+
+        <CommandBinding Command="Open" Executed="OpenExecute"/>
+        <CommandBinding Command="Save" Executed="SaveExecute"/>
+        <CommandBinding Command="local:MyCommands.Exit" Executed="ExitExecuted"/>
+
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" HorizontalAlignment="Right" HorizontalContentAlignment="Right" >
+            <MenuItem Header="Файл" FontWeight="Bold" FontSize="14"  HorizontalContentAlignment="Left" >
+                <MenuItem Header="Копировать" Command="Copy"/>
+
+                <MenuItem Header="Сохранить" Command="Save"/>
+
+                <MenuItem Header="Вставить" Command="Paste"/>
+
+                <MenuItem Header="Открыть" Command="Open" />
+
+                <MenuItem Header="Выход" Command="local:MyCommands.Exit"/>
+            </MenuItem>
+
+        </Menu>
+
+        <TabControl Background="#FF6C7071" Grid.Row="1" >
+
+            <TabItem  Header="Единичный счет"
+                      BorderBrush="Gold" BorderThickness="2" Background="#FF60339A" FontWeight="Bold" FontSize="14">
+
+                <UniformGrid Rows="2" Background="#FFECF9F5">
+
+                    <GroupBox Header="История вычисления"
+                              Margin="10,2,10,2" Padding="5" BorderThickness="3" BorderBrush="#FF308811" >
+
+                        <TextBox x:Name="textBox"
+                                   ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Margin="5"
+                                   IsReadOnly="True"
+                                 TextChanged="ScrollToEndVoid"
+                                 Text="{Binding Path=HistoryNotes}"/>
+                    </GroupBox>
+
+
+                    <GroupBox Header="Ввод данных" 
+                              Margin="10,2,10,2" Padding="5" BorderThickness="3" BorderBrush="Gray" Background="#FFC2CECB" >
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Наименование конструкции" Margin="2"/>
+                            <TextBox x:Name="elementName" 
+                                     Grid.Row="0" Grid.Column="1" Margin="2" BorderThickness="3" Text="{Binding Path=Construction}"/>
+
+                            <Label Content="Позиция элемента №" Margin="2" Grid.Row="1" Grid.Column="0"/>
+                            <TextBox x:Name="itemPosition"
+                                     Grid.Row="1" Grid.Column="1" Margin="2" BorderThickness="3" Text="{Binding Path=Position}"/>
+
+                            <Label Content="Класс арматуры"  Margin="2" Grid.Row="2" Grid.Column="0" />
+                            <GroupBox x:Name="RadioButtons" Grid.Row="2" Grid.Column="1">
+                                <Grid>
+                                    <RadioButton  Name="categoryRebar240" Content="А240С"
+                                          VerticalContentAlignment="Center"  
+                                          VerticalAlignment="Center" HorizontalAlignment="Left"
+                                          IsChecked="{Binding Path=SteelClassA240C}"/>
+                                    <RadioButton  Name="categoryRebar500" Content="А500С"
+                                          VerticalContentAlignment="Center"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"
+                                          IsChecked="{Binding Path=SteelClassA500C}"/>
+                                </Grid>
+                            </GroupBox>
+                            
+                            <Label Content="Диаметр арматуры (мм)"
+                                   Grid.Row="3" Grid.Column="0" Margin="2"/>
+                            <ComboBox x:Name="comboBoxDiameterRebar"
+                                Grid.Row="3" Grid.Column="1" 
+                                Margin="3" 
+                                Width="60" 
+                                HorizontalAlignment="Left" 
+                                HorizontalContentAlignment="Left" 
+                                VerticalContentAlignment="Center" 
+                                BorderThickness="3" 
+                                SelectedIndex="{Binding Path=Diametr}">
+                                <TextBlock Text="6"/>
+                                <!--0.222-->
+                                <TextBlock Text="8"/>
+                                <!--0.395-->
+                                <TextBlock Text="10"/>
+                                <!--0.617-->
+                                <TextBlock Text="12"/>
+                                <!--0.888-->
+                                <TextBlock Text="14"/>
+                                <!--1.21-->
+                                <TextBlock Text="16"/>
+                                <!--1.58-->
+                                <TextBlock Text="18"/>
+                                <!--2-->
+                                <TextBlock Text="20"/>
+                                <!--2.47-->
+                                <TextBlock Text="22"/>
+                                <!--2.98-->
+                                <TextBlock Text="25"/>
+                                <!--3.85-->
+                                <TextBlock Text="28"/>
+                                <!--4.83-->
+                            </ComboBox>
+
+                            <Label Content="Длина прута арматуры (мм)"  Margin="2" Grid.Row="4" Grid.Column="0"/>
+                            <TextBox x:Name="lengthRebar" 
+                                     Grid.Row="4" Grid.Column="1" Margin="2" BorderThickness="3" Text="{Binding Path=Length}"/>
+
+                            <Label Content="Количество арматуры (шт)"  Margin="2" Grid.Row="5" Grid.Column="0"/>
+                            <TextBox x:Name="sumRebar" 
+                                     Grid.Row="5" Grid.Column="1" Margin="2" BorderThickness="3" Text="{Binding Path=Amount}"/>
+
+
+                        </Grid>
+                    </GroupBox>
+                </UniformGrid>
+            </TabItem>
+
+            <TabItem Header="Отчетная ведомость расхода стали" 
+                     FontWeight="Bold" FontSize="14" BorderBrush="Gold" BorderThickness="5" Background="#FF60339A">
+                <UniformGrid Rows="1" Width="906">
+                    <GroupBox Header="Отчет" Padding="5" BorderThickness="3" BorderBrush="#FF308811" Margin="7,0,17,0">
+                        <TextBox x:Name="textBoxReport"
+                                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                 Margin="5"
+                                 IsReadOnly="True"
+                                 Text="{Binding Path=ReportText}"/>
+                    </GroupBox>
+                </UniformGrid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="2">
+            <Button x:Name="buttonClear" Content="Очистить"
+                    HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                    FontWeight="Bold" FontSize="14" BorderBrush="Gold" BorderThickness="2" Background="#FF60339A"
+                    Width="150" Margin="20 2 0 2"
+                    Command="{Binding Path=PopLastCommand}"/>
+
+            <Button x:Name="buttonCalculate" Content="Считать"
+                    HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                    FontWeight="Bold" FontSize="18" BorderBrush="Gold" BorderThickness="2" Background="#FF60339A" 
+                    Width="300" Margin="0 2 0 2"
+                    Command="{Binding Path=CalcTonasCommand}"/>
+
+            <Button x:Name="buttonReport" Content="Отчет" 
+                    HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                    FontWeight="Bold" FontSize="14" BorderBrush="Gold" BorderThickness="2" Background="#FF60339A"
+                    Width="150" Margin="0 2 20 2" 
+                    Command="{Binding Path=WriteReportCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
